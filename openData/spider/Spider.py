@@ -2,19 +2,18 @@
 # author: pengr
 
 import requests
-import csv
 from spider import JsonParse
-import xlsxwriter
+
 
 class Spider(object):
     def __init__(self,):
         self.headers = {
             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36'
         }
-        self.tableHeader = {
-            'level':0,  #层级为0
-            'header':set()  #表头集合
-        }
+        '''
+            表格的头部，可通过对获取的数据集合获取，也可通过func函数自定义
+        '''
+        self.tableHeader =  {}
         self.data = []
         self.file= []
 
@@ -51,43 +50,9 @@ class Spider(object):
         parse = JsonParse.JsonParse()
         parse.parse(content)
         self.data.append(parse.getItems())
-        '''
-        需要更新
-        '''
-        self.tableHeader.update(parse.getKeys())
+        self.tableHeader.update(parse.getHeaders())
 
-        
-def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
-    workbook = xlsxwriter.Workbook(filename)
-    worksheet = workbook.add_worksheet()
-    row = 0
-    col = 0
-
-    h_format = workbook.add_format()
-    h_format.set_bold()
-    h_format.set_bg_color('green')
-
-    for info in header:
-        worksheet.write(row,col,info,h_format)
-        col += 1
     
-    for item in items:
-        row += 1
-        col = 0
-        for key in header:
-            if key in item:
-                worksheet.write(row,col,str(item[key]))
-            col+=1
-
-    workbook.close()
-
-def writeDataCsv(header,items,filename = 'cachedata.csv'):
-    with open(filename,'a+',encoding='utf8') as file:
-        f_csv = csv.DictWriter(file, header)
-        f_csv.writeheader()
-        f_csv.writerows(items)
-            
-
      
 if __name__ == '__main__':
     pass

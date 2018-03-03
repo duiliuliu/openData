@@ -67,15 +67,17 @@ class JsonParse(object):
         return [key for key in self.dict.keys()]
 
     def getHeaders(self):
-        level = 0
-        header = []
-        '''
-        更新
-        '''
+        header = {}
         for k,v in self.dict.items():
-            if type(v) == list and v[0] == '子属性'：
-                level = 1
-            header.append(k)
+            try:
+                if '子属性：' in v:
+                    header[k] = v[1:]
+                else:
+                    header[k] = ''
+            except:
+                header[k] = ''
+        return header
+            
 
 if __name__ == '__main__':
     parse = JsonParse()

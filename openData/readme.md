@@ -9,11 +9,17 @@
         对爬取的数据使用JSonParse进行解析<br>
         内置写入Excel与xsv函数
     *   JSonParse   对爬取得json数据进行解析
+    *   Writer  将数据写入Excel表中
 
 *   fsSpider 与 gzSpider 分别是相应的爬虫文件
 *   source为数据保存目录
 
 ---
 ---
+<b>以后</b>
 
-*   下一步 ： 对生成的Excel进行美化并插入图表
+*   对生成的Excel进行简单数据统计并插入图表
+*   下载数据并进行质量分析
+*   将分析结果以图表化展示
+*   构建展示网站
+*   将分析结果展示到网站上
