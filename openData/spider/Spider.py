@@ -67,7 +67,7 @@ class Spider(object):
     #多进程爬取数据
     def mul_crawl(self):
         pool = multiprocessing.Pool(processes = 4)
-        pool.apply_async(self.crawl, (url, ))
+        pool.apply_async(self.crawl, ('url', ))
         pool.close() # 关闭进程池，表示不能在往进程池中添加进程
         pool.join() # 等待进程池中的所有进程执行完毕，必须在close()之后调用
 
