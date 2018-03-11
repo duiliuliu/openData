@@ -14,6 +14,7 @@ class Spider(object):
             表格的头部，可通过对获取的数据集合获取，也可通过func函数自定义
         '''
         self.tableHeader =  {}
+        self.tableHeader_self = {}  #自定义表头
         self.data = []
         self.clean_func = func  #数据处理
 
@@ -71,18 +72,26 @@ class Spider(object):
         pool.close() # 关闭进程池，表示不能在往进程池中添加进程
         pool.join() # 等待进程池中的所有进程执行完毕，必须在close()之后调用
 
-    #将数据写入Excel表中
-    def write_excel(self):
+    #设置自定义表头
+    def set_tableHeader_self(self,tableHeader_self):
+        self.tableHeader_self = tableHeader_self
+
+    #设置清理数据函数
+    def set_func(self,func):
+        self.clean_func = func
+
+    #将数据写入Excel表中 , all==true时表示有自定义头部的话，将自定义头部与所有数据头部都写入
+    def write_excel(self, all=False):
+        pass
+
+    #将数据写入Csv表中
+    def write_csv(self, all=False):
         pass
 
     #将数据处理
     def data_clean(self):
         self.clean_func(data=self.data, header=self.tableHeader)  
 
-    #将数据写入Csv表中
-    def write_csv(self):
-        pass
-        
     #对获取的数据解析
     def _parseData(self,content):
         parse = JsonParse.JsonParse()
@@ -90,13 +99,18 @@ class Spider(object):
         self.data.append(parse.getItems())
         self.tableHeader.update(parse.getHeaders())
 
+    #通过索引获取列
+    def getcolumn_by_index(self,index):
+        pass
+
+    #通过列明获取列
+    def getcolumn_by_name(self,name):
+        pass
+
     
      
 if __name__ == '__main__':
     pass
 
-    
-
-  
     
 

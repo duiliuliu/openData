@@ -11,6 +11,7 @@
     *   JSonParse   对爬取得json数据进行解析
     *   Writer  将数据写入Excel表中
 
+*   charts为可视化模块
 *   fsSpider 与 gzSpider 分别是相应的爬虫文件
 *   source为数据保存目录
 
