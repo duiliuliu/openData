@@ -44,6 +44,7 @@ def func(response = None,  data=None, header = None):
 
     if header:
         myheader = {
+            'cata_id':'id',
             'cata_title':'数据目录名称',
             'data_count':'数据量',
             'file_count':'文件数',
@@ -64,7 +65,7 @@ def func(response = None,  data=None, header = None):
             'use_task_count':'评价次数',
             'use_points':'评分总数',
             'use_scores':'平均评分',
-            'header_sort':[
+            'header_sort':['cata_id',
                 'cata_title','data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
                 'update_cycle','use_type','released_time','group_name','description','use_file_count','use_visit','use_grade',
                 'use_task_count','use_points','use_scores'
@@ -81,6 +82,7 @@ if __name__ == '__main__':
     page = 135
     urls = []
     for start in range(page):
+        start *= 6
         url="http://data.harbin.gov.cn/odweb/catalog/catalog.do?method=GetCatalog&group_id&org_code&start="+str(start)+"&length=6&pageLength=6&cata_type=default&keywords"
         urls.append(url)
     hrbSpider = Spider.Spider()

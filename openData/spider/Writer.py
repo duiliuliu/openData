@@ -3,6 +3,7 @@
 
 import xlsxwriter
 import csv
+import pymongo
 
 def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
     workbook = xlsxwriter.Workbook(filename)
@@ -12,7 +13,7 @@ def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
 
     h_format = workbook.add_format()
     h_format.set_bold()
-    h_format.set_bg_color('green')
+    h_format.set_bg_color('#90EE90')
 
     if 'myheader' in header:
         #自定义的头部
@@ -67,4 +68,31 @@ def writeDataCsv(header,items,filename = 'cachedata.csv'):
         f_csv = csv.DictWriter(file, header)
         f_csv.writeheader()
         f_csv.writerows(items)
+
+
+
+'''
+    目录数据存储 db.catalog
+    资源数据 暂定
+'''
+def writeDataMongo(headers,items):
+
+    conn = pymongo.MongoClient()        #连接本地服务器，pymongo.Connection('10.32.38.50',27017)
+    #选择opendata库
+    db = conn.opendata
+
+    #建立索引 暂时选择抓取到的数据id做索引
+    db.catalog.ensure_index('cata_id',unique=True)
+
+    try:
+        db.catalog.insert_one(headers)
+    except :
+        print('header已存在')
+
+    try:
+        db.catalog.insert_many(items,ordered=False)    #
+    except Exception as e:
+        print(e)
+
+    print('数据插入成功')
             

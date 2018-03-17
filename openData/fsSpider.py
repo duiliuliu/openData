@@ -4,6 +4,7 @@
 '''佛山基础数据资源目录'''
 
 from spider import Spider,Writer
+import os
 
 def func(response = None,  data=None, header = None):
     if response:
@@ -16,14 +17,25 @@ def func(response = None,  data=None, header = None):
 
             #去除简介空值
             item['description'] = mytrim(item['description'])
+
+            #去除ID空值
+            item['cata_id'] = item['cata_id'][0]
             
             #获取到的更新频率与数据格式为编号，转化编号
             if item['conf_update_cycle'] == '4':
                 item['conf_update_cycle'] = '每月'
             elif item['conf_update_cycle'] == '7':
                 item['conf_update_cycle'] = '每年'
-            else:
-                item['conf_update_cycle'] = '不详'
+            elif item['conf_update_cycle'] == '5':
+                item['conf_update_cycle'] = '每季度'
+            elif item['conf_update_cycle'] == '2':
+                item['conf_update_cycle'] = '每天'
+            elif item['conf_update_cycle'] == '6':
+                item['conf_update_cycle'] = '每半年'
+            elif item['conf_update_cycle'] == '8':
+                item['conf_update_cycle'] = '实时'
+            elif item['conf_update_cycle'] == '1':
+                item['conf_update_cycle'] = '自定义'
                 
             format_list = item['conf_use_type'].strip().split(',')
             format_dict = {
@@ -39,12 +51,17 @@ def func(response = None,  data=None, header = None):
             item['conf_use_type'] = ' '.join(tmp)
 
             #所属主题与所属行业所标识的键为同一键
-            item['topic_name'] = item['group_name'][1]
-            item['group_name'] = item['group_name'][0]
+            if type(item['group_name']) == list:
+                item['topic_name'] = item['group_name'][1]
+                item['group_name'] = item['group_name'][0]
+            else:
+                item['topic_name'] = item['group_name']
+                item['group_name'] = ''
                 
 
     if header:
         myheader = {
+            'cata_id':'id',
             'cata_title':'数据目录名称',
             'data_count':'数据量',
             'file_count':'文件数',
@@ -65,7 +82,7 @@ def func(response = None,  data=None, header = None):
             'use_task_count':'评价次数',
             'use_points':'评分总数',
             'use_scores':'平均评分',
-            'header_sort':[
+            'header_sort':['cata_id',
                 'cata_title','data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
                 'conf_update_cycle','conf_use_type','released_time','group_name','description','use_file_count','use_visit','use_grade',
                 'use_task_count','use_points','use_scores'
@@ -85,9 +102,12 @@ def mytrim(item):
 
 if __name__ == '__main__':
     ''' 佛山数据  66页'''
+
+
     page = 66
     urls = []
     for start in range(page):
+        start *= 6
         url="http://www.fsdata.gov.cn/data/catalog/catalog.do?method=GetCatalog&data={&_order=cc.update_time desc&org_code&group_id&use_type&catalog_format&keywords&tag&grade&cata_type=default&start="+str(start)+"&length=6&pageLength=6&}"
         urls.append(url)
     fsSpider = Spider.Spider()
@@ -95,5 +115,9 @@ if __name__ == '__main__':
     #filecsv = 'source/fsdata.csv'
     #Writer.writeDataCsv(fsSpider.tableHeader,fsSpider.data,filename=filecsv)
 
-    filexlsx = 'source/fsdata.xlsx'
+    path = os.getcwd()
+    filexlsx = path+'/source/fsdata.xlsx'
+
     Writer.writeDataExcel(fsSpider.tableHeader,fsSpider.data,filename=filexlsx)
+    Writer.writeDataMongo(fsSpider.tableHeader,fsSpider.data)
+    print('\tend!')
