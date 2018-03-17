@@ -5,6 +5,12 @@ import xlsxwriter
 import csv
 import pymongo
 
+'''
+    将数据写入Excel中
+    header  Excel表头
+    items   数据项
+    filename    文件名称
+'''
 def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
     workbook = xlsxwriter.Workbook(filename)
     worksheet = workbook.add_worksheet()
@@ -63,6 +69,12 @@ def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
     workbook.close()
 
 
+'''
+    将数据写入csv中
+    header  csv表头
+    items   数据项
+    filename 文件名称
+'''
 def writeDataCsv(header,items,filename = 'cachedata.csv'):
     with open(filename,'a+',encoding='utf8') as file:
         f_csv = csv.DictWriter(file, header)
@@ -74,23 +86,29 @@ def writeDataCsv(header,items,filename = 'cachedata.csv'):
 '''
     目录数据存储 db.catalog
     资源数据 暂定
+    headers 数据头部
+    items  数据集合
+    collection_name 集合名
+    index 索引
 '''
-def writeDataMongo(headers,items):
+def writeDataMongo(headers, items, collection_name, index='cata_id'):
 
     conn = pymongo.MongoClient()        #连接本地服务器，pymongo.Connection('10.32.38.50',27017)
     #选择opendata库
     db = conn.opendata
 
     #建立索引 暂时选择抓取到的数据id做索引
-    db.catalog.ensure_index('cata_id',unique=True)
+    db.catalog.ensure_index(index,unique=True)
+
+    collection = eval(collection_name)
 
     try:
-        db.catalog.insert_one(headers)
+        collection.insert_one(headers)
     except :
         print('header已存在')
 
     try:
-        db.catalog.insert_many(items,ordered=False)    #
+        collection.insert_many(items,ordered=False)    #
     except Exception as e:
         print(e)
 

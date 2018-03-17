@@ -119,5 +119,5 @@ if __name__ == '__main__':
     filexlsx = path+'/source/fsdata.xlsx'
 
     Writer.writeDataExcel(fsSpider.tableHeader,fsSpider.data,filename=filexlsx)
-    Writer.writeDataMongo(fsSpider.tableHeader,fsSpider.data)
+    Writer.writeDataMongo(fsSpider.tableHeader,fsSpider.data,collection_name='db.fs_catalog')
     print('\tend!')
