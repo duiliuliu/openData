@@ -1,7 +1,7 @@
 const ipc = require('electron').ipcRenderer
 
 const runSpiderBtn = document.getElementById('run-spider')
-const skanWindowBtn = document.getElementById('skan-window')
+const skanWindowBtn = document.getElementById('manage-window-demo-toggle') //manage-window-demo-toggle  skan-window
 const analWindowBtn = document.getElementById('anal-window')
 
 const display = require('./display')
@@ -49,7 +49,7 @@ ipc.on('running-spider', function (event, dirpath) {
         header = header['myheader']
       } 
 
-      write('fs_catalog.html',display(header,body))
+      write('fs_catalog.html',display(header,body,"fs-catalog-modal"))
 
       node = document.createElement('p')
       node.innerHTML = '更新数据完成'
@@ -73,8 +73,31 @@ ipc.on('skanning-data', function (event, dirpath) {
     if (err) {
         return console.error(err);
     }
+    data = data.toString().replace('<a style="position:fixed;font-color:#8aba87" href="javascript:window.close()">点这儿关闭</a>','')
     node_skan.innerHTML=data
+
   });
  
    
+})
+
+const path = require('path')
+const BrowserWindow = require('electron').remote.BrowserWindow
+const globalShortcut = require('electron').remote.globalShortcut
+
+document.getElementById('skan-window').addEventListener('click', function (event) {
+  const modalPath = path.join('file://', __dirname, '../sections/cities/fs_catalog.html')
+  let win = new BrowserWindow({
+     frame: false,
+     width: 1100,
+     height: 600,
+     title: '数据集'
+    })
+  win.setFullScreen(true)
+  globalShortcut.register('ESC', () => {
+    win.setFullScreen(false);
+  })
+  win.on('close', function () { win = null })
+  win.loadURL(modalPath)
+  win.show()
 })

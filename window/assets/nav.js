@@ -15,6 +15,8 @@ storage.get('activeSectionButtonId', function (err, id) {
 })
 
 document.body.addEventListener('click', function (event) {
+
+  
   if (event.target.dataset.section) {
     handleSectionTrigger(event)
   } else if (event.target.dataset.modal) {
@@ -53,6 +55,7 @@ function showMainContent () {
 function handleModalTrigger (event) {
   hideAllModals()
   const modalId = event.target.dataset.modal + '-modal'
+  console.log(modalId)
   document.getElementById(modalId).classList.add('is-shown')
 }
 
