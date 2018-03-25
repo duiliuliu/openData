@@ -15,13 +15,14 @@ var display = function (headers,data,id){
 
     var htm = ''
 
-    htm +=       '<div id="' + id + '" class="tab-pane fade in active" >'
-        +   '<a style="position:fixed;font-color:#8aba87" href="javascript:window.close()">点这儿关闭</a>'
+    htm +=      '<template class="task-template">'
+        +   '<div id="' + id + '" class="tab-pane fade in active about modal" >'
+        +   '<button class="modal-hide">点我退出</button>'
         +    '<table class="table table-bordered table-hover">'
         +    '<caption class="h3 text-info">资源目录</caption>'   
         +   createTh(header_list,headers)
         +   createTd(header_list,data)  
-        +   ' </table></div> '
+        +   ' </table></div></template> '
         
     return htm
 }

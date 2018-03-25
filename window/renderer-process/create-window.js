@@ -26,21 +26,21 @@ ipc.on('running-spider', function (event, dirpath) {
   node_load.style.height = '200px'
   node_load.style.overflow = 'auto'
 
-  node = document.createElement('p')
-  node.innerHTML = '下载...'
+var appendText = function(pNode,text){
+  node = document.createElement('text')
+  node.innerHTML = '<br>'+text
   node_load.appendChild(node)
+}
+
+  appendText(node_load,'下载...')
 
   var request = require('request')
   request.post('http://127.0.0.1:8081/catalog?query=222',{'method':'getfsdata'},function(err,res,body){
     if(!err &&res.statusCode==200){
+ 
+      appendText(node_load,'抓取数据完成')  
 
-      node = document.createElement('p')
-      node.innerHTML = '抓取数据完成'
-      node_load.appendChild(node)
-
-      node = document.createElement('p')
-      node.innerHTML = '更新...'
-      node_load.appendChild(node)
+      appendText(node_load,'更新...')
 
       body = JSON.parse(body)
 
@@ -51,9 +51,7 @@ ipc.on('running-spider', function (event, dirpath) {
 
       write('fs_catalog.html',display(header,body,"fs-catalog-modal"))
 
-      node = document.createElement('p')
-      node.innerHTML = '更新数据完成'
-      node_load.appendChild(node)
+      appendText(node_load,'更新数据完成')
       
       ipc.send('skan-data')
     }
@@ -73,13 +71,17 @@ ipc.on('skanning-data', function (event, dirpath) {
     if (err) {
         return console.error(err);
     }
-    data = data.toString().replace('<a style="position:fixed;font-color:#8aba87" href="javascript:window.close()">点这儿关闭</a>','')
+    data = data.toString().replace('<button class="modal-hide">点我退出</button>','').replace('fs-catalog-modal','wrap-catalog')
+      .replace('modal','').replace('about','')
+      .replace('<template class="task-template">','')
+      .replace('</template>','')
     node_skan.innerHTML=data
 
   });
  
    
 })
+/*
 
 const path = require('path')
 const BrowserWindow = require('electron').remote.BrowserWindow
@@ -101,3 +103,4 @@ document.getElementById('skan-window').addEventListener('click', function (event
   win.loadURL(modalPath)
   win.show()
 })
+*/

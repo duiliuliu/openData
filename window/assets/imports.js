@@ -4,7 +4,7 @@ const links = document.querySelectorAll('link[rel="import"]')
 Array.prototype.forEach.call(links, function (link) {
   let template = link.import.querySelector('.task-template')
   let clone = document.importNode(template.content, true)
-  if (link.href.match('about.html')) {
+  if (link.href.match('about.html')||link.href.match('catalog.html')) {
     document.querySelector('body').appendChild(clone)
   } else {
     document.querySelector('.content').appendChild(clone)

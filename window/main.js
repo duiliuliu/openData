@@ -8,7 +8,7 @@ const app = electron.app
 
 const debug = /--debug/.test(process.argv[2])
 
-if (process.mas) app.setName('Electron 小测试')
+if (process.mas) app.setName('熊博士')
 
 var mainWindow = null
 
@@ -23,7 +23,7 @@ function initialize () {
       width: 1080,
       minWidth: 680,
       height: 840,
-      title: '小展示',   // app.getName()
+      title: '熊博士',   // app.getName()
       //无边框配置
       transparent: false,
       frame: true
