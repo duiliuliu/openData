@@ -44,7 +44,7 @@ function handleSectionTrigger (event) {
 }
 
 function activateDefaultSection () {
-  document.getElementById('button-fs').click()
+  document.getElementById('button-about').click()
 }
 
 function showMainContent () {
