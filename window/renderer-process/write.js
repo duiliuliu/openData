@@ -1,8 +1,10 @@
 
 var fs = require('fs')
 
+const path = require('path')
+
 var write = function(filename,data){
-    var dir = './sections/cities'
+    var dir = path.join( __dirname, '../sections/cities')
 
     stats = fs.statSync(dir)
     if(!stats.isDirectory()){

@@ -8,6 +8,8 @@ const display = require('./display')
 const write = require('./write')
 const fs = require('fs')
 
+const path = require('path')
+
 
 
 runSpiderBtn.addEventListener('click', function () {
@@ -35,7 +37,7 @@ var appendText = function(pNode,text){
   appendText(node_load,'下载...')
 
   var request = require('request')
-  request.post('http://127.0.0.1:8081/catalog?query=222',{'method':'getfsdata'},function(err,res,body){
+  request.post('http://182.254.218.20:8081/catalog?query=222',{'method':'getfsdata'},function(err,res,body){
     if(!err &&res.statusCode==200){
  
       appendText(node_load,'抓取数据完成')  
@@ -54,6 +56,8 @@ var appendText = function(pNode,text){
       appendText(node_load,'更新数据完成')
       
       ipc.send('skan-data')
+    }else{
+      appendText(node_load,'连接服务器失败...')
     }
 
   })
@@ -67,11 +71,13 @@ ipc.on('skanning-data', function (event, dirpath) {
   node_skan.style.height = '400px'
   node_skan.style.overflow = 'auto'
 
-  fs.readFile('./sections/cities/fs_catalog.html', function (err, data) {
+  filename = path.join( __dirname, '../sections/cities/fs_catalog.html')
+
+  fs.readFile(filename, function (err, data) {
     if (err) {
         return console.error(err);
     }
-    data = data.toString().replace('<button class="modal-hide">点我退出</button>','').replace('fs-catalog-modal','wrap-catalog')
+    data = data.toString().replace('<div><button class="modal-hide">点我退出</button><div>','').replace('fs-catalog-modal','wrap-catalog')
       .replace('modal','').replace('about','')
       .replace('<template class="task-template">','')
       .replace('</template>','')
@@ -83,7 +89,7 @@ ipc.on('skanning-data', function (event, dirpath) {
 })
 /*
 
-const path = require('path')
+
 const BrowserWindow = require('electron').remote.BrowserWindow
 const globalShortcut = require('electron').remote.globalShortcut
 

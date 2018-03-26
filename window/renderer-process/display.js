@@ -16,8 +16,9 @@ var display = function (headers,data,id){
     var htm = ''
 
     htm +=      '<template class="task-template">'
+        
         +   '<div id="' + id + '" class="tab-pane fade in active about modal" >'
-        +   '<button class="modal-hide">点我退出</button>'
+        +   '<div><button class="modal-hide">点我退出</button><div>'
         +    '<table class="table table-bordered table-hover">'
         +    '<caption class="h3 text-info">资源目录</caption>'   
         +   createTh(header_list,headers)
