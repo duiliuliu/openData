@@ -59,7 +59,7 @@
     "glob": "^6.0.4",
     "highlight.js": "^9.3.0",
     "mongodb": "^3.0.4",
-    "request":"^2.85.0"
+    "request": "^2.85.0"
   },
   "standard": {
     "env": {

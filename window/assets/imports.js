@@ -6,7 +6,7 @@ Array.prototype.forEach.call(links, function (link) {
   let clone = document.importNode(template.content, true)
   if (link.href.match('about.html')||link.href.match('catalog.html')) {
     document.querySelector('body').appendChild(clone)
-  } else {
+  }  else{
     document.querySelector('.content').appendChild(clone)
   }
 })

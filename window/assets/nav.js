@@ -16,7 +16,6 @@ storage.get('activeSectionButtonId', function (err, id) {
 
 document.body.addEventListener('click', function (event) {
 
-  
   if (event.target.dataset.section) {
     handleSectionTrigger(event)
   } else if (event.target.dataset.modal) {
@@ -41,6 +40,7 @@ function handleSectionTrigger (event) {
   storage.set('activeSectionButtonId', buttonId, function (err) {
     if (err) return console.error(err)
   })
+  tem3.select(buttonId)
 }
 
 function activateDefaultSection () {
@@ -55,7 +55,6 @@ function showMainContent () {
 function handleModalTrigger (event) {
   hideAllModals()
   const modalId = event.target.dataset.modal + '-modal'
-  console.log(modalId)
   document.getElementById(modalId).classList.add('is-shown')
 }
 
@@ -82,3 +81,88 @@ function hideAllSectionsAndDeselectButtons () {
 function displayAbout () {
   document.querySelector('#about-modal').classList.add('is-shown')
 }
+
+var tem3 = new Vue({
+  el:'#windows-section',
+  data:{
+    title:'',
+    theme:'',
+    icon:'',
+    message:['点击Run进行抓取！'],
+    i:1,
+    items:[
+      {
+          id:'button-fs',
+          title:'佛山市开放数据',
+          data:'fs_catalog.json',
+          theme:'section js-section u-category-windows',
+          icon:'assets/img/icons.svg#icon-native-ui',
+          message:['点击Run进行抓取！'],
+      },
+      {
+          id:'button-gz',
+          title:'贵州市开放数据',
+          data:'gz_catalog.json',
+          theme:'section js-section u-category-menu',
+          icon:'assets/img/icons.svg#icon-menu',
+          message:['点击Run进行抓取！'],
+      },
+      {
+          id:'button-hrb',
+          title:'哈尔滨市开放数据',
+          data:'hrb_catalog.json',
+          theme:'section js-section u-category-system',
+          icon:'assets/img/icons.svg#icon-system',
+          message:['点击Run进行抓取！'],
+      }
+    ]
+  },
+  methods:{
+    addMessage: function(msg){
+      this.items[this.i].message.push(msg)
+    },
+    select: function(id){
+      for( i in this.items){
+        if (this.items[i].id==id){
+          this.i = i;
+          this.title = this.items[i].title;
+          this.icon = this.items[i].icon;
+          this.theme = this.items[i].theme;
+          this.message = this.items[i].message;
+          file = this.items[i].data
+        }
+      }
+    }
+  }
+
+})
+
+const runSpiderBtn = document.getElementById('run-spider')
+
+runSpiderBtn.addEventListener('click', function () {
+ 
+  let node_load = document.getElementById('load-data')
+  node_load.style.height = '200px'
+  node_load.style.overflow = 'auto'
+
+  tem3.addMessage('下载...')
+
+  var request = require('request')
+  request.post('http://182.254.218.20:8081/catalog?query=222',{'method':'getfsdata'},function(err,res,body){
+    if(!err &&res.statusCode==200){
+ 
+      tem3.addMessage('抓取数据完成')  
+
+      tem3.addMessage('更新...')
+ 
+      write('fs_catalog.json',body) //display(header,body,"fs-catalog-modal")
+
+      tem3.addMessage('更新数据完成')
+      
+    }else{
+      tem3.addMessage('连接服务器失败...')
+    }
+
+  })
+ 
+})
