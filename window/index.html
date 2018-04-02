@@ -34,9 +34,8 @@
         城市
       </h5>
       <!-- 城市列表为json格式的静态数据，通过js进行展示 -->
-      <button type="button" id="button-fs" data-section="windows" class="nav-button"><em>佛山</em></button>
-      <button type="button" id="button-gz" data-section="windows" class="nav-button"><em>贵州</em></button>
-      <button type="button" id="button-hrb" data-section="windows" class="nav-button"><em>哈尔滨</em></button>
+      <button v-for="item in items" type="button" id="{{item.id}}" data-section="windows" class="nav-button"><em>{{item.name}}</em></button>
+ 
     </div>
 
     

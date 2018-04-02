@@ -11,8 +11,7 @@ var write = function(filename,data){
         fs.mkdir(dir)
     }    
 
-    filename = dir +'/'+  filename
-
+    filename = dir +'\\'+  filename
     fs.writeFileSync(filename,data)
 }
 

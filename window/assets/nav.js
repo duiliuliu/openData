@@ -1,4 +1,5 @@
 const storage = require('electron-json-storage')
+const write = require('../renderer-process/write')
 
 // Default to the view that was active the last time the app was open
 storage.get('activeSectionButtonId', function (err, id) {
@@ -83,8 +84,9 @@ function displayAbout () {
 }
 
 var tem3 = new Vue({
-  el:'#windows-section',
+  el:'body',
   data:{
+    id:'id',
     title:'',
     theme:'',
     icon:'',
@@ -93,6 +95,7 @@ var tem3 = new Vue({
     items:[
       {
           id:'button-fs',
+          name:'佛山',
           title:'佛山市开放数据',
           data:'fs_catalog.json',
           theme:'section js-section u-category-windows',
@@ -101,6 +104,7 @@ var tem3 = new Vue({
       },
       {
           id:'button-gz',
+          name:'贵州',
           title:'贵州市开放数据',
           data:'gz_catalog.json',
           theme:'section js-section u-category-menu',
@@ -109,6 +113,7 @@ var tem3 = new Vue({
       },
       {
           id:'button-hrb',
+          name:'哈尔滨',
           title:'哈尔滨市开放数据',
           data:'hrb_catalog.json',
           theme:'section js-section u-category-system',
@@ -125,6 +130,7 @@ var tem3 = new Vue({
       for( i in this.items){
         if (this.items[i].id==id){
           this.i = i;
+          this.id = this.items[i].id;
           this.title = this.items[i].title;
           this.icon = this.items[i].icon;
           this.theme = this.items[i].theme;
@@ -132,37 +138,32 @@ var tem3 = new Vue({
           file = this.items[i].data
         }
       }
+    },
+    query:function(para){
+
+      let node_load = document.getElementById('load-data')
+      node_load.style.height = '200px'
+      node_load.style.overflow = 'auto'
+      tem3.addMessage('下载...')
+      var request = require('request')
+      request.post('http://182.254.218.20:8081/catalog?query='+para,function(err,res,body){
+        if(!err &&res.statusCode==200){
+    
+          tem3.addMessage('抓取数据完成')  
+
+          tem3.addMessage('更新...')
+    
+          write(file,body) //display(header,body,"fs-catalog-modal")
+
+          tem3.addMessage('更新数据完成')
+          
+        }else{
+          console.log(err)
+          tem3.addMessage('连接服务器失败...')
+        }
+
+      })
     }
   }
 
-})
-
-const runSpiderBtn = document.getElementById('run-spider')
-
-runSpiderBtn.addEventListener('click', function () {
- 
-  let node_load = document.getElementById('load-data')
-  node_load.style.height = '200px'
-  node_load.style.overflow = 'auto'
-
-  tem3.addMessage('下载...')
-
-  var request = require('request')
-  request.post('http://182.254.218.20:8081/catalog?query=222',{'method':'getfsdata'},function(err,res,body){
-    if(!err &&res.statusCode==200){
- 
-      tem3.addMessage('抓取数据完成')  
-
-      tem3.addMessage('更新...')
- 
-      write('fs_catalog.json',body) //display(header,body,"fs-catalog-modal")
-
-      tem3.addMessage('更新数据完成')
-      
-    }else{
-      tem3.addMessage('连接服务器失败...')
-    }
-
-  })
- 
 })

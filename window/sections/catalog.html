@@ -2,7 +2,7 @@
     <div id='fs-catalog-modal' class="tab-pane fade in active about modal" >
         <div><button class="modal-hide">点我退出</button><div>
             <table class="table table-bordered table-hover">
-                <caption class="h3 text-info">资源目录</caption>
+                <caption class="h3 text-info">{{title}}</caption>
                 <tr v-for="item in items">
                     <th class="text-center" v-if="$index==1" v-for="it in item" track-by="$index">{{it}}</th>
                     <td class="text-center" v-if="$index>1" v-for="it in item" track-by="$index">{{it}}</td>
@@ -11,50 +11,69 @@
     </div>
     <script>
 
-        var tem = new Vue({
+       var tem = new Vue({
             el:'#fs-catalog-modal',
             data:{
-                items:[]
+                title:'资源目录',
+                items:[],
+                items_list:{}
             },
             methods:{
                 init:function() {
+      
+                    if (file in this.items_list){
+                        this.items = this.items_list[file]
+                        return
+                    }
+                    tem.title="资源目录"
+
                     var fs = require('fs')
                     var path = require('path')
-                    var filename = path.join( __dirname, './sections/cities/fs_catalog.json')
-                    console.log(file)
-                    var data = fs.readFileSync(filename)
-                    data = JSON.parse(data)
-                    var header = data[0]
-                    if ('myheader' in data[0]){
-                        header = header['myheader']
-                        data[0] = header
-                    } 
-
-                    var header_list = []
-
-                    //获取表头 
-                    if ('header_sort' in header){
-                        header_list = header['header_sort']
-                    }else{
-                        for(h in header){
-                            header_list.push(h)
+                    var filename = path.join( __dirname, './sections/cities/',file)
+                    var data = fs.readFile(filename,function(err,data){
+                        if(!err){
+                        data = JSON.parse(data)
+                        var header = data[0]
+                        if ('myheader' in data[0]){
+                            header = header['myheader']
+                            data[0] = header
+                        } 
+                
+                        var header_list = []
+                
+                        //获取表头 
+                        if ('header_sort' in header){
+                            header_list = header['header_sort']
+                        }else{
+                            for(h in header){
+                                header_list.push(h)
+                            }
                         }
-                    }
-
-
-                    for (d in data){
-                        mi_list = []
-                        for (h in header_list){
-                            mi_list.push(data[d][header_list[h]])
+                
+                
+                        for (d in data){
+                            mi_list = []
+                            for (h in header_list){
+                                mi_list.push(data[d][header_list[h]])
+                            }
+                            tem.items.push(mi_list)
+                            //console.log(mi_list)
                         }
-                        this.items.push(mi_list)
-                        //console.log(mi_list)
-                    }
+
+                        tem.items_list[file] = tem.items
+                        } else{
+                            tem.items = []
+                            tem.title="暂无数据..."
+                        }
+                    
+            
+                    })
+                
 
                 },
             }
         })
-        
+
 
     </script>
 </template>

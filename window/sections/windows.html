@@ -17,7 +17,7 @@
         </button>
         <div class="demo-box">
           <div class="demo-controls">
-            <button class="demo-button" id="run-spider">Run</button>
+            <button class="demo-button" id="run-spider" v-on:click="query(id)">Run</button>
           </div>
           <p>运行爬虫，对数据进行更新</p>
 
@@ -44,7 +44,7 @@
             <div id='catalog' class="tab-pane fade in active" >
 
                     <table class="table table-bordered table-hover">
-                        <caption class="h3 text-info">资源目录</caption>
+                        <caption class="h3 text-info">{{title}}</caption>
                         <tr v-for="item in items">
                             <th class="text-center" v-if="$index==1" v-for="it in item" track-by="$index">{{it}}</th>
                             <td class="text-center" v-if="$index>1" v-for="it in item" track-by="$index">{{it}}</td>
