@@ -7,9 +7,18 @@ var app = express()
 
 var query = require('./mongo')
 
+
 app.post('/catalog',function(req,res){
     console.log(req.query);
-    query('fs_catalog',res);
+    para = req.query.replace('button-','')
+    para += '_catalog'
+    try {
+        query(para,res);
+    } catch (error) {
+        
+    }
+    
+    
 })
 
 var serve = app.listen(8081,function(){
