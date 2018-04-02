@@ -9,11 +9,9 @@ var query = require('./mongo')
 
 
 app.post('/catalog',function(req,res){
-    console.log(req.query);
-    para = req.query.replace('button-','')
-    para += '_catalog'
+    console.log(req.query)
     try {
-        query(para,res);
+        query(req.query['query'],res);
     } catch (error) {
         
     }

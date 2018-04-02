@@ -86,7 +86,7 @@ function displayAbout () {
 var tem3 = new Vue({
   el:'body',
   data:{
-    id:'id',
+    data:'data',
     title:'',
     theme:'',
     icon:'',
@@ -97,7 +97,7 @@ var tem3 = new Vue({
           id:'button-fs',
           name:'佛山',
           title:'佛山市开放数据',
-          data:'fs_catalog.json',
+          data:'fs_catalog',
           theme:'section js-section u-category-windows',
           icon:'assets/img/icons.svg#icon-native-ui',
           message:['点击Run进行抓取！'],
@@ -106,7 +106,7 @@ var tem3 = new Vue({
           id:'button-gz',
           name:'贵州',
           title:'贵州市开放数据',
-          data:'gz_catalog.json',
+          data:'gz_catalog',
           theme:'section js-section u-category-menu',
           icon:'assets/img/icons.svg#icon-menu',
           message:['点击Run进行抓取！'],
@@ -115,11 +115,20 @@ var tem3 = new Vue({
           id:'button-hrb',
           name:'哈尔滨',
           title:'哈尔滨市开放数据',
-          data:'hrb_catalog.json',
+          data:'hrb_catalog',
           theme:'section js-section u-category-system',
           icon:'assets/img/icons.svg#icon-system',
           message:['点击Run进行抓取！'],
-      }
+      },
+      {
+        id:'button-qd',
+        name:'青岛',
+        title:'青岛市开放数据',
+        data:'qd_catalog',
+        theme:'section js-section u-category-native-ui',
+        icon:'assets/img/icons.svg#icon-system',
+        message:['点击Run进行抓取！'],
+    }
     ]
   },
   methods:{
@@ -130,12 +139,12 @@ var tem3 = new Vue({
       for( i in this.items){
         if (this.items[i].id==id){
           this.i = i;
-          this.id = this.items[i].id;
+          this.data = this.items[i].data;
           this.title = this.items[i].title;
           this.icon = this.items[i].icon;
           this.theme = this.items[i].theme;
           this.message = this.items[i].message;
-          file = this.items[i].data
+          file = this.items[i].data + '.json'
         }
       }
     },
@@ -158,7 +167,7 @@ var tem3 = new Vue({
           tem3.addMessage('更新数据完成')
           
         }else{
-          console.log(err)
+          //console.log(err)
           tem3.addMessage('连接服务器失败...')
         }
 

@@ -37,7 +37,7 @@ function initialize () {
     mainWindow = new BrowserWindow(windowOptions)
     mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
-    mainWindow.webContents.openDevTools() //开启调试，
+    //mainWindow.webContents.openDevTools() //开启调试，
 
     mainWindow.setMenu(null)  //设置菜单不可见
 

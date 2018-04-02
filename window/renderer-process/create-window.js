@@ -24,6 +24,8 @@ var tem2 = new Vue({
       init:function() {
           
             if (file in this.items_list){
+                console.log('-'+file)
+                console.log(this.items_list)
                 this.items = this.items_list[file]
                 return
             }
@@ -34,35 +36,36 @@ var tem2 = new Vue({
             var filename = path.join( __dirname, '../sections/cities/',file)
             var data = fs.readFile(filename,function(err,data){
                 if(!err){
-                data = JSON.parse(data)
-                var header = data[0]
-                if ('myheader' in data[0]){
-                    header = header['myheader']
-                    data[0] = header
-                } 
-        
-                var header_list = []
-        
-                //获取表头 
-                if ('header_sort' in header){
-                    header_list = header['header_sort']
-                }else{
-                    for(h in header){
-                        header_list.push(h)
+                    tem2.items = []
+                    data = JSON.parse(data)
+                    var header = data[0]
+                    if ('myheader' in data[0]){
+                        header = header['myheader']
+                        data[0] = header
+                    } 
+            
+                    var header_list = []
+            
+                    //获取表头 
+                    if ('header_sort' in header){
+                        header_list = header['header_sort']
+                    }else{
+                        for(h in header){
+                            header_list.push(h)
+                        }
                     }
-                }
-        
-        
-                for (d in data){
-                    mi_list = []
-                    for (h in header_list){
-                        mi_list.push(data[d][header_list[h]])
+            
+            
+                    for (d in data){
+                        mi_list = []
+                        for (h in header_list){
+                            mi_list.push(data[d][header_list[h]])
+                        }
+                        tem2.items.push(mi_list)
+                        //console.log(mi_list)
                     }
-                    tem2.items.push(mi_list)
-                    //console.log(mi_list)
-                }
 
-                tem2.items_list[file] = tem2.items
+                    tem2.items_list[file] = tem2.items
                 } else{
                     tem2.items = []
                     document.getElementById('skan-data').style.height = '50px'
@@ -82,11 +85,11 @@ var tem2 = new Vue({
 ipc.on('skanning-data', function (event, dirpath) {
   
   let node_skan = document.getElementById('skan-data')
-  tem.init()
-  tem2.init()
   node_skan.style.height = '400px'
   node_skan.style.overflow = 'auto'
-   
+  tem.init()
+  tem2.init()
+  
 })
 /*
  
