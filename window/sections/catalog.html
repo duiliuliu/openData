@@ -22,7 +22,6 @@
                 init:function() {
       
                     if (file in this.items_list){
-                        console.log(file)
                         this.items = this.items_list[file]
                         return
                     }
@@ -33,36 +32,10 @@
                     var filename = path.join( __dirname, './sections/cities/',file)
                     var data = fs.readFile(filename,function(err,data){
                         if(!err){
-                            tem.items = []
-                            data = JSON.parse(data)
-                            var header = data[0]
-                            if ('myheader' in data[0]){
-                                header = header['myheader']
-                                data[0] = header
-                            } 
-                    
-                            var header_list = []
-                    
-                            //获取表头 
-                            if ('header_sort' in header){
-                                header_list = header['header_sort']
-                            }else{
-                                for(h in header){
-                                    header_list.push(h)
-                                }
-                            }
-                    
-                    
-                            for (d in data){
-                                mi_list = []
-                                for (h in header_list){
-                                    mi_list.push(data[d][header_list[h]])
-                                }
-                                tem.items.push(mi_list)
-                                //console.log(mi_list)
-                            }
-
+                            tem.items = JSON.parse(data)
+                            
                             tem.items_list[file] = tem.items
+                             
                         } else{
                             tem.items = []
                             tem.title="暂无数据..."
