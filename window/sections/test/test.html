@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+    <script src='echarts-all.js'></script>
+    <script type="text/javascript" src="jquery-1.7.2.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h2>test!</h2>
+        </br>
+        <!--建立一个1000*600大小的区域-->
+        <div id="main" style="width: 1000px;height:600px;">
+            
+        </div>
+    </div>
+
+    <script>
+
+        var myChart = echarts.init(document.getElementById('main'));
+        $.get('/data.json', function (data) {
+            
+                var sizeValue = '57%';
+                var symbolSize = 2.5;
+                option = {
+                    legend: {},
+                    tooltip: {},
+                    toolbox: {
+                        left: 'center',
+                        feature: {
+                            dataZoom: {}
+                        }
+                    },
+                    grid: [
+                        {right: sizeValue, bottom: sizeValue},
+                        {left: sizeValue, bottom: sizeValue},
+                        {right: sizeValue, top: sizeValue},
+                        {left: sizeValue, top: sizeValue}
+                    ],
+                    xAxis: [
+                        {type: 'value', gridIndex: 0, name: 'Income', axisLabel: {rotate: 50, interval: 0}},
+                        {type: 'category', gridIndex: 1, name: 'Country', boundaryGap: false, axisLabel: {rotate: 50, interval: 0}},
+                        {type: 'value', gridIndex: 2, name: 'Income', axisLabel: {rotate: 50, interval: 0}},
+                        {type: 'value', gridIndex: 3, name: 'Life Expectancy', axisLabel: {rotate: 50, interval: 0}}
+                    ],
+                    yAxis: [
+                        {type: 'value', gridIndex: 0, name: 'Life Expectancy'},
+                        {type: 'value', gridIndex: 1, name: 'Income'},
+                        {type: 'value', gridIndex: 2, name: 'Population'},
+                        {type: 'value', gridIndex: 3, name: 'Population'}
+                    ],
+                    dataset: {
+                        dimensions: [
+                            'Income',
+                            'Life Expectancy',
+                            'Population',
+                            'Country',
+                            {name: 'Year', type: 'ordinal'}
+                        ],
+                        source: data
+                    },
+                    series: [
+                        {
+                            type: 'scatter',
+                            symbolSize: symbolSize,
+                            xAxisIndex: 0,
+                            yAxisIndex: 0,
+                            encode: {
+                                x: 'Income',
+                                y: 'Life Expectancy',
+                                tooltip: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            type: 'scatter',
+                            symbolSize: symbolSize,
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            encode: {
+                                x: 'Country',
+                                y: 'Income',
+                                tooltip: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            type: 'scatter',
+                            symbolSize: symbolSize,
+                            xAxisIndex: 2,
+                            yAxisIndex: 2,
+                            encode: {
+                                x: 'Income',
+                                y: 'Population',
+                                tooltip: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            type: 'scatter',
+                            symbolSize: symbolSize,
+                            xAxisIndex: 3,
+                            yAxisIndex: 3,
+                            encode: {
+                                x: 'Life Expectancy',
+                                y: 'Population',
+                                tooltip: [0, 1, 2, 3, 4]
+                            }
+                        }
+                    ]
+                };
+            
+                myChart.setOption(option);
+            });
+            
+        
+    
+    </script>
+</body>
+</html>

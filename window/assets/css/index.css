@@ -1,0 +1,18 @@
+.my-nav{
+        /* width: 340px; */
+    /* overflow-x: hidden; */
+    /* overflow-y: auto; */
+    color: var(--color-subtle);
+    border-right: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    /* visibility: hidden; */
+    opacity: 0.8;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 10px;
+}

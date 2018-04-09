@@ -58,7 +58,7 @@
 
     <div class="demo">
       <div class="demo-wrapper">
-        <button class="js-container-target demo-toggle-button">数据质量分析
+        <button id="analyse-window-demo-toggle" class="js-container-target demo-toggle-button">数据质量分析
           <div class="demo-meta u-avoid-clicks">支持系统: Win, OS X, Linux </div>
         </button>
         <div class="demo-box">
@@ -66,10 +66,20 @@
             <button class="demo-button" id="anal-window">🌰 点击进入全屏 🌰</button>
           </div>
 
-          </p>
+          <div>
+              <ul class=" nav-pills nav-justified" >
+                  <li class="active"><a href="#section-1">第一部分</a></li>
+                  <li><a href="#section-2">第二部分</a></li>
+                  <li><a href="#section-3">第三部分</a></li>
+                  <li><a href="#section-4">第四部分</a></li>
+                  <li><a href="#section-5">第五部分</a></li>
+              </ul>
+          </div>
 
           <div id='anal-data' class="demo-protip">
             <!-- 数据展示 -->
+            
+            <div id="main" style="width: 493px;height:400px;"></div>
           </div>
 
         </div>
