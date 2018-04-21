@@ -1,30 +1,95 @@
-<template class="task-template">
+﻿<template class="task-template">
   <div id="about-modal" class="about modal">
     <div class="about-wrapper">
       <header class="about-header">
         <img class="about-logo" src="assets/img/about.png" srcset="assets/img/about.png 1x, assets/img/about@2x.png 2x" alt="基于python对政府开放数据的质量分析">
+        
       </header>
+      
       <main class="about-sections">
-        <section class="about-section play-along">
-          <h2><a href="https://github.com/duiliuliu/openData">基于python对政府开放数据的质量分析</a></h2>
-            <p>本项目基于python对政府开放数据平台的进行质量分析，将分析结果图表化展示到APP上</p>
-        </section>
+         
         <section class="about-section about-code">
-          <h2>简单介绍一下本项目</h2>
-            <p>本文档还在进行中...</p>
+          <h2>使用说明</h2>
+            <p >
+              <h4>数据采集</h4>
+               
+              <span style="position: relative;
+              display: block;
+              margin: 0;
+              padding: .5em 1.5em;
+              line-height: 1.5;
+              font: inherit;
+              font-size: 1.2em;
+              text-align: left;
+              border: 1px dotted #bbb6b6;
+              border-radius: 4px;
+              color: inherit;
+              background-color: transparent;
+              transition: border-color .12s;
+              outline: none;">
+              <ul>
+                <li> 点击<b>数据获取与更新</b>标签，相应的数据获取展示区域展开，点击<b>RUN</b>按钮可以对数据进行实时更新。</li>
+                <li> RUN按钮旁边的<b>导出数据</b>提供将已采集到的数据已格式化文件保存至本地，支持csv、xlsx、txt格式导出。</li>
+              </ul>
+          
+               
+              </span>
 
-            <p>利用爬虫快速的获取数据</p>
+            </p>
 
-            <p>对数据进行整理</p>
+            <p> 
+              <h4>数据浏览  </h4>
+                 
+                <span style="position: relative;
+                display: block;
+                margin: 0;
+                padding: .5em 1.5em;
+                line-height: 1.5;
+                font: inherit;
+                font-size: 1.2em;
+                text-align: left;
+                border: 1px dotted #bbb6b6;
+                border-radius: 4px;
+                color: inherit;
+                background-color: transparent;
+                transition: border-color .12s;
+                outline: none;">
+                <ul>
+                  <li>点击<b>数据浏览</b>标签，相应的数据浏览展示区域展开，在下方的数据展示区域内将数据以表格的形式展示。</li>
+                  <li> <b>全屏展示</b>则是将所要展示的数据表格区域扩展至软件全屏方便用户浏览。</li>
+                </ul>
+        
+                </span>
+            </p>
 
-            <p>对数据进行分析</p>
-
-            <p>将分析结果进行可视化站展示</p>
+            <p><h4>数据分析</h4>
+                
+              <span style="position: relative;
+              display: block;
+              margin: 0;
+              padding: .5em 1.5em;
+              line-height: 1.5;
+              font: inherit;
+              font-size: 1.2em;
+              text-align: left;
+              border: 1px dotted #bbb6b6;
+              border-radius: 4px;
+              color: inherit;
+              background-color: transparent;
+              transition: border-color .12s;
+              outline: none;">
+              <ul>
+                <li> 点击<b>数据分析</b>标签，相应的数据可视化展示区域展开，下方的图表展示区域内将图表展示。</li>
+                <li <b>全屏展示</b>则是将所要展示的数据图表区域扩展至软件全屏方便用户浏览。></li>
+              </ul>
+   
+                </span>
+            </p> 
         </section>
         <footer class="about-section footer">
-          <div class="rainbow-button-wrapper">
-            <button id="get-started" class="about-button modal-hide">点我开始</button>
-          </div>
+            <div class="rainbow-button-wrapper">
+              <button id="get-started" class="about-button modal-hide">点我开始</button>
+            </div>
         </footer>
       </main>
     </div>

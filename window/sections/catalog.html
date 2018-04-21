@@ -1,4 +1,4 @@
-<template class="task-template">
+﻿<template class="task-template">
     <div id='fs-catalog-modal' class="tab-pane fade in active about modal" >
         <div><button class="modal-hide">点我退出</button><div>
             <table class="table table-bordered table-hover">
@@ -11,18 +11,21 @@
     </div>
     <script>
 
-       var tem = new Vue({
+         var tem = new Vue({
             el:'#fs-catalog-modal',
             data:{
                 title:'资源目录',
                 items:[],
                 items_list:{}
             },
+            mounted:function(){
+               
+            }, 
             methods:{
                 init:function() {
       
                     if (file in this.items_list){
-                        this.items = this.items_list[file]
+                        this.items = this.items_list[file].slice(0,10)
                         return
                     }
                     tem.title="资源目录"
@@ -32,9 +35,9 @@
                     var filename = path.join( __dirname, './sections/cities/',file)
                     var data = fs.readFile(filename,function(err,data){
                         if(!err){
-                            tem.items = JSON.parse(data)
+                            tem.items_list[file] = JSON.parse(data)
                             
-                            tem.items_list[file] = tem.items
+                            tem.items = tem.items_list[file].slice(0,10)
                              
                         } else{
                             tem.items = []
@@ -46,8 +49,21 @@
                 
 
                 },
+                load:function(){
+
+                    it = tem.items_list[file].slice(tem.items.length,tem.items.length+10)
+                    for( i in it)
+                        tem.items.push(it[i])
+                }
             }
         })
+        let node = document.getElementById('fs-catalog-modal') 
+        node.addEventListener('scroll',function(){
+            if(node.scrollHeight - node.scrollTop === node.clientHeight){ 
+                tem.load()
+            }
+        })
+
 
 
     </script>

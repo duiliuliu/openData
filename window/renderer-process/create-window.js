@@ -1,4 +1,4 @@
-const ipc = require('electron').ipcRenderer
+﻿const ipc = require('electron').ipcRenderer
 
 const skanWindowBtn = document.getElementById('manage-window-demo-toggle') //manage-window-demo-toggle  skan-window
 const analWindowBtn = document.getElementById('analyse-window-demo-toggle')
@@ -8,6 +8,14 @@ skanWindowBtn.addEventListener('click', function () {
 })
 analWindowBtn.addEventListener('click', function () {
   ipc.send('anal-data')
+})
+
+
+const node = document.getElementById('skan-data') 
+node.addEventListener('scroll',function(){
+    if(node.scrollHeight - node.scrollTop === node.clientHeight){ 
+        ipc.send('load-data')
+    }
 })
 
 
@@ -21,12 +29,13 @@ var tem2 = new Vue({
   },
   methods:{
       init:function() {
+	    tem2.title="资源目录"
           
             if (file in this.items_list){
-                this.items = this.items_list[file]
+                this.items = this.items_list[file].slice(0,10)
                 return
             }
-            tem2.title="资源目录"
+            
 
             var fs = require('fs')
             var path = require('path')
@@ -34,9 +43,9 @@ var tem2 = new Vue({
             fs.readFile(filename,function(err,data){
                 if(!err){
         
-                    tem2.items = JSON.parse(data)
+                    tem2.items_list[file] = JSON.parse(data)
                     
-                    tem2.items_list[file] = tem2.items
+                    tem2.items = tem2.items_list[file].slice(0,10)
                 } else{
                     tem2.items = []
                     document.getElementById('skan-data').style.height = '50px'
@@ -47,7 +56,18 @@ var tem2 = new Vue({
             })
          
       },
+load:function(){
+        
+        it = tem2.items_list[file].slice(tem2.items.length,tem.items.length+10)
+        for( i in it)
+            tem2.items.push(it[i])
+    }
   }
+})
+
+ipc.on('loading-data', function (event) {
+    tem2.load()
+    console.log('ll')
 })
 
  
@@ -73,7 +93,7 @@ ipc.on('anlysing-data', function (event, dirpath) {
     node_anal.style.height = height + 'px'
     node_anal.style.overflow = 'auto'
 
-    node_display.style.height = height*0.5 + 'px'
+    node_display.style.height = height*0.75 + 'px'
     node_display.style.width = width*0.9 + 'px' 
 
     

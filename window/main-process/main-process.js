@@ -12,3 +12,7 @@ ipc.on('skan-data', function (event) {
 ipc.on('anal-data', function (event) {
   event.sender.send('anlysing-data')
 })
+
+ipc.on('load-data', function (event) {
+  event.sender.send('loading-data')
+})
