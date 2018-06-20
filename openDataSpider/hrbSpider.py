@@ -5,8 +5,9 @@
 
 from spider import Spider,Writer
 import re
-import os,requests,multiprocessing
+import os,requests
 from lxml import html
+from multiprocessing.dummy import Pool as ThreadPool #多线程
 
 def func(response = None,  data=None, header = None):
     if response:
@@ -67,16 +68,21 @@ def func(response = None,  data=None, header = None):
             'use_task_count':'评价次数',
             'use_points':'评分总数',
             'use_scores':'平均评分',
-            # 'data_count':'数据条目',
-            'download_url':'下载URL',
-            'download_file':'文件名称', 
-            'header_sort':['cata_id','download_url','download_file',
-                'cata_title','data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
+            'data_count':'数据条目',
+            'download_url':'下载URL http://data.harbin.gov.cn/odweb/catalog/catalogDetail.do?method=getFileDownloadAddr&fileId=',
+            'download_file':'文件名称',
+            'download_size':'文件大小',
+            'header_sort':['cata_title','cata_id','data_count','download_url','download_file','download_size',
+                'data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
                 'update_cycle','use_type','released_time','group_name','description','use_file_count','use_visit','use_grade',
                 'use_task_count','use_points','use_scores'
             ]
         }
 
+        header['download_url'] = ''
+        header['download_file'] = ''
+        header['download_size'] = ''
+        header['data_count'] = ''
         header['topic_name'] = ''
         header['myheader'] = myheader
  
@@ -89,18 +95,21 @@ def downloadfile(data):
     res = htm.xpath('//div[@class="download-list"]/ul/li/div[2]/a/@id') 
     download_file = htm.xpath('//div[@class="download-list"]/ul/li/div[2]/a/text()')
     download_file = [re.sub('\s.*?$','',i.strip()) for i in download_file if i.strip() != ''] 
-    print(download_file[0])
+    # print(download_file[0])
 
     url_pre = 'http://data.harbin.gov.cn/odweb/catalog/catalogDetail.do?method=getFileDownloadAddr&fileId='
     download_url = [url_pre+i for i in res] 
  
-    data['download_url'] = ' '.join(download_url)
+    data['download_url'] = ' '.join([i for i in res])
     data['download_file'] = ' '.join(download_file)   
  
-    dir = os.getcwd()+'/source/hrb/'+data['cata_title']
+    dir = os.getcwd()+'/source/hrb/'+re.sub('[/\\:\*\?<>|"\']','', data['cata_title'])
     if not os.path.exists(dir):
         os.mkdir(dir)
     for url,file in zip(download_url,download_file):
+        if os.path.exists(dir+'/'+file):
+            continue
+
         res = requests.get(url)  
         with open(dir+'/'+file,'wb+') as f:
             f.write(res.content)
@@ -125,7 +134,7 @@ if __name__ == '__main__':
 
     print('\n'.join(['-'*40,'\t下载全部资源','-'*40]))
     
-    pool = multiprocessing.Pool(processes = 6)
+    pool = ThreadPool(processes = 6)
     pool.map(downloadfile, hrbSpider.data)
     pool.close() # 关闭进程池，表示不能在往进程池中添加进程
     pool.join() # 等待进程池中的所有进程执行完毕，必须在close()之后调用
@@ -133,7 +142,7 @@ if __name__ == '__main__':
     # downloadfile(hrbSpider.data[0])
 
 
-    # filexlsx = 'source/hrbdata.xlsx'
-    # Writer.writeDataExcel(hrbSpider.tableHeader,hrbSpider.data,filename=filexlsx)
+    filexlsx = 'source/hrbdata.xlsx'
+    Writer.writeDataExcel(hrbSpider.tableHeader,hrbSpider.data,filename=filexlsx)
     # Writer.writeDataMongo(hrbSpider.tableHeader,hrbSpider.data,collection_name='db.hrb_catalog')
     print('\tend!')

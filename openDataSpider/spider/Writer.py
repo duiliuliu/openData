@@ -25,7 +25,7 @@ def writeDataExcel(header,items,filename = 'cachedata.xlsx'):
         #自定义的头部
         myheader = header['myheader']
         myheader2 = []
-
+ 
         for info in myheader['header_sort']:
             if not header[info]:
                 worksheet.write(row,col,myheader[info],h_format)

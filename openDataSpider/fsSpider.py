@@ -5,8 +5,9 @@
 
 from spider import Spider,Writer
 import os
-import requests 
-import multiprocessing
+import requests  
+# from multiprocessing import Pool 多进程  
+from multiprocessing.dummy import Pool as ThreadPool #多线程
 
 def func(response = None,  data=None, header = None):
     if response:
@@ -85,16 +86,20 @@ def func(response = None,  data=None, header = None):
             'use_points':'评分总数',
             'use_scores':'平均评分',
             'data_count':'数据条目',
-            'download_url':'下载URL',
+            'download_url':'下载URL http://www.fsdata.gov.cn/data/catalog/catalogDetail.do?method=getFileDownloadAddr&fileId=',
             'download_file':'文件名称',
             'download_size':'文件大小',
-            'header_sort':['cata_id','data_count','download_url','download_file','download_size',
-                'cata_title','data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
+            'header_sort':['cata_title','cata_id','data_count','download_url','download_file','download_size',
+                'data_count','file_count','api_count','open_type','topic_name','update_time','org_name','cata_tags',
                 'conf_update_cycle','conf_use_type','released_time','group_name','description','use_file_count','use_visit','use_grade',
                 'use_task_count','use_points','use_scores'
             ]
         }
-
+ 
+        header['download_url'] = ''
+        header['download_file'] = ''
+        header['download_size'] = ''
+        header['data_count'] = ''
         header['topic_name'] = ''
         header['myheader'] = myheader
  
@@ -110,25 +115,33 @@ def downloadfile(data):
     print('\t-------'+data['cata_id'])
     url = 'http://www.fsdata.gov.cn/data/catalog/catalogDetail.do?method=GetDownLoadInfo'
     para = {
-        'cata_id':'43270',
+        'cata_id':data['cata_id'],
         'conf_type':'2'
     } 
     response = requests.post(url,data=para)
     res = response.json()
 
     url_pre = 'http://www.fsdata.gov.cn/data/catalog/catalogDetail.do?method=getFileDownloadAddr&fileId='
-    download_url = [url_pre+i['fileId'] for i in res['data']]
+    download_url = [i['fileId'] for i in res['data']]
     download_file = [i['fileName'] for i in res['data']]
-
-    data['data_count'] = res['data'][0]['dataCount'] 
+    try:
+        data['data_count'] = res['data'][0]['dataCount']
+    except Exception:
+        data['data_count'] = ''
+     
     data['download_url'] = ' '.join(download_url)
     data['download_file'] = ' '.join(download_file)
     data['download_size'] = ' '.join([str(i['fileSize']) for i in res['data']])
+
+    download_url = [url_pre+i['fileId'] for i in res['data']]
  
     dir = os.getcwd()+'/source/fs/'+data['cata_title']
     if not os.path.exists(dir):
         os.mkdir(dir)
     for url,file in zip(download_url,download_file):
+        if os.path.exists(dir+'/'+file+'.zip'):
+            continue
+
         res = requests.get(url)  
         with open(dir+'/'+file+'.zip','wb+') as f:
             f.write(res.content)
@@ -155,7 +168,7 @@ if __name__ == '__main__':
 
     print('\n'.join(['-'*40,'\t下载全部资源','-'*40]))
     
-    pool = multiprocessing.Pool(processes = 6)
+    pool = ThreadPool(processes = 6)
     pool.map(downloadfile, fsSpider.data)
     pool.close() # 关闭进程池，表示不能在往进程池中添加进程
     pool.join() # 等待进程池中的所有进程执行完毕，必须在close()之后调用
